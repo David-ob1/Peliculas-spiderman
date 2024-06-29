@@ -7,6 +7,7 @@ const $containerMovies = document.getElementById("container")
 fetch(api)
  .then(response => response.json())
  .then(data => {
+
     const arrayMovies = data
 
    let templateMovies = arrayMovies.map(element => {
@@ -32,7 +33,31 @@ fetch(api)
 
     let checkbox = SetXpropiedad(arrayMovies,"Distributors")
 
-    
+    createCheckbox(checkbox,contenedorCheck)
+
+
+     // Escuchador de eventos
+   buscador.addEventListener("input",filtroCruzado)
+    contenedorCheck.addEventListener("change",filtroCruzado)
+
+
+       // main filter
+      function filtroCruzado (){
+      let checked = document.querySelectorAll("input[type='checkbox']:checked")
+      const checkedValues = Array.from(checked).map( checkbox => checkbox.value)
+     
+      let checkUser = filtroCheck(arrayMovies,checkedValues,"Distributors")
+
+      // console.log(checkUser)
+     
+      let buscadorMovies = filtroXnombre(checkUser,buscador.value,"Title")
+
+         console.log(buscadorMovies)
+
+   
+    }
+
+ 
     
 
  })
@@ -54,41 +79,44 @@ function SetXpropiedad (array,property){
    return Array.from( new Set (arrayOfproperty))
 }
 
+function createCheckbox (list,container) {
+   let template = ""
+   for(item of list){
+       template += checkboxTemplate(item)
+   }
+   displayElement(container,template)
 
-function checkboxTemplate (pelicula){
 
-   return ` <input type="checkbox" name="" id="${pelicula}">
-            <label for="checkbox">${pelicula}</label>
+}
+
+function checkboxTemplate (categoria){
+
+   return ` <input type="checkbox" value="${categoria}"  id="${categoria}">
+            <label for="${categoria}">${categoria}</label>
             `
 }
 
-
-
-
-//  FILTROS DE USUARIO
-function filtroXnombre(array,text,property){
-   let  value = text.toLoweCase()
-   let filter = array.filter( movie => movie[property].toLoweCase().includes(value))
-  
-   return filter
-}
-
-function filtroCheck(array,checkSelected,property){
-
-   if(checkSelected.length == 0){
-      return array
+    
+    //  FILTROS DE USUARIO
+    function filtroXnombre(array,text,property){
+      let  value = text.toLowerCase()
+      let filter = array.filter( movie => movie[property].toLowerCase().includes(value))
+     
+      return filter
    }
-
-  let filter = array.filter(item => checkSelected.includes(item[property]))
-
-   // checkSelected
-
-}
-
-
-   //  buscador.addEventListener("change",()=>{
-   //    console.log(buscador.value)
-   //  })
+   
+      function filtroCheck(array,checkSelected,property){
+   
+      if(checkSelected.length == 0){
+         return array
+      }
+   
+     let filter = array.filter(item => checkSelected.includes(item[property]))
+   
+     return filter
+   
+   }
+       
 
 
 function displayElement(container,template){
