@@ -11,20 +11,8 @@ fetch(api)
     const arrayMovies = data
 
    let templateMovies = arrayMovies.map(element => {
-       let title = element.Title
-       let image = element.Poster
-       console.log(title)
-
-
-       const poster = `
-       <div>
-            <img src="${image}">
-            <h2>${title}</h2>
-       </div>
-       `
-       return poster
-       
-
+      
+      return posterTemplate(element)  
 
     })
 
@@ -47,12 +35,18 @@ fetch(api)
       const checkedValues = Array.from(checked).map( checkbox => checkbox.value)
      
       let checkUser = filtroCheck(arrayMovies,checkedValues,"Distributors")
-
-      // console.log(checkUser)
      
       let buscadorMovies = filtroXnombre(checkUser,buscador.value,"Title")
 
          console.log(buscadorMovies)
+
+         let templateForRender =""
+         for ( movie of buscadorMovies) {
+            templateForRender += posterTemplate(movie)  
+         }
+      
+    displayElement($containerMovies,templateForRender)
+        
 
    
     }
@@ -89,13 +83,25 @@ function createCheckbox (list,container) {
 
 }
 
+// templates
+
 function checkboxTemplate (categoria){
 
    return ` <input type="checkbox" value="${categoria}"  id="${categoria}">
             <label for="${categoria}">${categoria}</label>
             `
 }
+function posterTemplate(element){
 
+   const poster = `
+       <div>
+            <img src="${element.Poster}">
+            <h2>${element.Title}</h2>
+       </div>
+       `
+       return poster
+   
+}
     
     //  FILTROS DE USUARIO
     function filtroXnombre(array,text,property){
