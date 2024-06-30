@@ -10,6 +10,8 @@ fetch(api)
 
     const arrayMovies = data
 
+    arrayMovies.sort((a,b) =>  a.Year - b.Year  )
+
    let templateMovies = arrayMovies.map(element => {
       
       return posterTemplate(element)  
